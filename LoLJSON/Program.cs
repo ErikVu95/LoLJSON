@@ -12,5 +12,4 @@ namespace LoLJSON
         }
     }
 }
-
 //Sortere etter tags, lage champ, counterpicks

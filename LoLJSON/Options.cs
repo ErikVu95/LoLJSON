@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Channels;
@@ -14,7 +15,6 @@ namespace LoLJSON
         public string jsonFile = File.ReadAllText(fileName);
         public List<Champion> Champions = new();
         readonly SortValues sortValues = new();
-        int option;
 
         public Options()
         {
@@ -27,6 +27,7 @@ namespace LoLJSON
 
             while (true)
             {
+                int option = 0;
                 Console.WriteLine("Type the number of the option you'd like to go to.");
                 PrintMenu();
                 try
@@ -48,7 +49,7 @@ namespace LoLJSON
                 }
                 if (option == 1) { PrintAllChamps(); }
                 else if (option == 2) { sortValues.SortTags(Champions); }
-                else if (option == 3) {  }
+                else if (option == 3) { SearchChamp(); }
                 else if (option == 4) { Environment.Exit(0); }
 
 
@@ -59,7 +60,7 @@ namespace LoLJSON
         {
             Console.WriteLine("1. Print out all champions and stats.");
             Console.WriteLine("2. Sort champions after roles");
-            Console.WriteLine("3. placeholder sorter etter noe");
+            Console.WriteLine("3. Search champion");
             Console.WriteLine("4. Exit.");
         }
 
@@ -88,6 +89,39 @@ namespace LoLJSON
             Console.WriteLine("\n\nPress enter to go back to the menu.");
             Console.ReadLine();
             Console.Clear();
+        }
+
+        public void SearchChamp()
+        {
+            Console.WriteLine("Search for a champion");
+            string input = Console.ReadLine();
+            TextInfo cultInfo = new CultureInfo("en-US", false).TextInfo;
+            string capitalInput = cultInfo.ToTitleCase(input);
+
+
+            foreach (var champ in Champions)
+            {
+                if (champ.Name.Contains(capitalInput) || champ.Name.StartsWith(capitalInput))
+                {
+                    Console.WriteLine($"\n{champ.Name} \nTitle = {champ.Title}");
+                    Console.WriteLine("Tags: ");
+
+                    foreach (var tag in champ.Tags)
+                    {
+                        Console.Write(tag + "\n");
+                    }
+
+                    Console.Write("Hp = " + champ.Stats.Hp + ", ");
+                    Console.Write("Mana = " + champ.Stats.Mp + ", ");
+                    Console.Write("Movespeed = " + champ.Stats.Armor + ", ");
+                    Console.Write("Armor = " + champ.Stats.Armor + ", ");
+                    Console.Write("Crit = " + champ.Stats.Crit + ", ");
+                    Console.Write("Attack damage = " + champ.Stats.Attackdamage + ", ");
+                    Console.Write("Attack speed = " + champ.Stats.Attackspeed + "\n");
+                }
+            }
+            Console.WriteLine("\n\nPress enter to go back to the menu.");
+            Console.ReadLine();
         }
     }
 }
